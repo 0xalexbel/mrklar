@@ -1,7 +1,7 @@
 # mrklar (Merkle Archive)
 A minimal network archive using Merkle proof written in pure Rust.
 
-For more information about the project, please refer to the project (notes)[https://github.com/0xalexbel/mrklar/blob/main/NOTES.md]
+For more information about the project, please refer to the project [notes](https://github.com/0xalexbel/mrklar/blob/main/NOTES.md)
 
 # Install
 
