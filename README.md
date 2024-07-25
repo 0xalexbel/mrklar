@@ -1,5 +1,5 @@
 # mrklar (Merkle Archive)
-A minimal network archive using Merkle proof written in full Rust.
+A minimal network archive using Merkle proof written in pure Rust.
 
 The project consists of the following rust crates. 
 - `mrklar`: the server crate
@@ -93,6 +93,8 @@ merkle root.
 
 ## 2. Query the server merkle root
 
+Use the root command to query the current merkle root.
+
 ```bash
 cargo run --bin mrklar-cli -- --host 127.0.0.1 --port 10000 root
 ```
@@ -103,23 +105,30 @@ cargo run --bin mrklar-cli -- --host 127.0.0.1 --port 10000 root
 
 ## 3. Download and verify a file
 
+The download command automatically downloads the requested and file and performs verification using the provided merkle proof.
 The download command usage is:
 
 ```bash
-cargo run --bin mrklar-cli -- --host 127.0.0.1 --port 10000 download <FILE_INDEX> --out-dir <PATH/TO/DOWNLOADS/DIR> --verify <THE_CURRENT_MERKLE_ROOT>
+cargo run --bin mrklar-cli -- --host 127.0.0.1 --port 10000 download <FILE_INDEX> --out-dir <PATH/TO/DOWNLOADS/DIR>
 ```
 
-For example, to download the file at index `0`, verify it and then store it to the `./my_client/downloads` directory, the current merkle root must be provided as argument using the `--verify` option.
+For example, to download the file at index `0`, verify it and then store it to the `./my_client/downloads` directory.
 
 ```bash
 # Here, using the above merkle root, the command would look like this:
-cargo run --bin mrklar-cli -- --host 127.0.0.1 --port 10000 download 0 --out-dir ./my_client/downloads --verify 6baf2dbc2729dc5c218f11cb3ee01f274e332f3c24f9bbf7702e8cc4981ab3ea
+cargo run --bin mrklar-cli -- --host 127.0.0.1 --port 10000 download 0 --out-dir ./my_client/downloads
 ```
 
 ## 4. Additional commands
 
 - `count` : returns the number of stored files and the remote archive
 - `proof` : returns the merkle proof of the file with the specified index
+
+## 5. Environment Variables
+
+- `MRKLAR_FILES_DIR=<PATH>` : Path of the directory on the server where the uploaded files will be saved
+- `MRKLAR_TRACING=<true|false>` : Enable/disable server trace
+- `MRKLAR_TRACING_LEVEL=<"error" | "warn" | "info" | "debug" | "trace">` : max server trace level
 
 # Docker
 

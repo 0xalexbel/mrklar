@@ -56,9 +56,8 @@ impl MrklarApi {
         index: u64,
         output_dir: Option<PathBuf>,
         output_filename: Option<String>,
-        root: Option<Vec<u8>>,
         force: bool,
-    ) -> Result<(PathBuf, MerkleProof, Option<bool>), ApiError> {
+    ) -> Result<(PathBuf, MerkleProof, bool), ApiError> {
         let mut client = self.connect().await?;
 
         let mut stream = client
@@ -137,23 +136,26 @@ impl MrklarApi {
             tokio_file.sync_all().await?;
         }
 
-        // Verify if merkle root has been provided
-        let verified = if root.is_some() {
-            let root_v = root.unwrap();
-            // let root_v = match hex::decode(root.unwrap()) {
-            //     Ok(v) => v,
-            //     Err(_) => {
-            //         return Err(ApiError::Unexpected(
-            //             "Invalid merkle root hash.".to_string(),
-            //         ))
-            //     }
-            // };
-            let file_sha256 = sha256(&path)?;
-            let ok = merkle_proof.verify(&file_sha256, &root_v);
-            Some(ok)
-        } else {
-            None
-        };
+        let file_sha256 = sha256(&path)?;
+        let verified = merkle_proof.verify(&file_sha256);
+
+        // // Verify if merkle root has been provided
+        // let verified = if root.is_some() {
+        //     let root_v = root.unwrap();
+        //     // let root_v = match hex::decode(root.unwrap()) {
+        //     //     Ok(v) => v,
+        //     //     Err(_) => {
+        //     //         return Err(ApiError::Unexpected(
+        //     //             "Invalid merkle root hash.".to_string(),
+        //     //         ))
+        //     //     }
+        //     // };
+        //     let file_sha256 = sha256(&path)?;
+        //     let ok = merkle_proof.verify(&file_sha256, &root_v);
+        //     Some(ok)
+        // } else {
+        //     None
+        // };
 
         Ok((path, merkle_proof, verified))
     }

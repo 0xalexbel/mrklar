@@ -289,7 +289,7 @@ impl MerkleTree {
             assert!(level.try_parent_index(sibling_index)? == pos);
         }
 
-        Ok(MerkleProof::with_hashes(proof))
+        Ok(MerkleProof::from_raw_parts(self.root_hash()?.clone(), proof))
     }
 }
 
@@ -339,7 +339,7 @@ mod test {
 
         // proof at 0 should be ok
         let proof = t.proof_at(0).unwrap();
-        let verified = proof.verify(&left, root_hash);
+        let verified = proof.verify(&left);
         assert!(verified);
 
         // proof at 1 does not exist
@@ -367,12 +367,12 @@ mod test {
 
         // proof at 0 should be ok
         let proof = t.proof_at(0).unwrap();
-        let verified = proof.verify(&left, root_hash);
+        let verified = proof.verify(&left);
         assert!(verified);
 
         // proof at 1 should be ok
         let proof = t.proof_at(1).unwrap();
-        let verified = proof.verify(&right, root_hash);
+        let verified = proof.verify(&right);
         assert!(verified);
     }
 
@@ -405,22 +405,22 @@ mod test {
 
         // proof at 0 should be ok
         let proof = t.proof_at(0).unwrap();
-        let verified = proof.verify(&a, root_hash);
+        let verified = proof.verify(&a);
         assert!(verified);
 
         // proof at 1 should be ok
         let proof = t.proof_at(1).unwrap();
-        let verified = proof.verify(&b, root_hash);
+        let verified = proof.verify(&b);
         assert!(verified);
 
         // proof at 2 should be ok
         let proof = t.proof_at(2).unwrap();
-        let verified = proof.verify(&c, root_hash);
+        let verified = proof.verify(&c);
         assert!(verified);
 
         // should fail with garbage
         let dead = hex::decode(dead_hex).unwrap();
-        let verified = proof.verify(&dead, root_hash);
+        let verified = proof.verify(&dead);
         assert!(!verified);
     }
 
@@ -493,27 +493,27 @@ mod test {
 
         // proof at 0 should be ok
         let proof = t.proof_at(0).unwrap();
-        let verified = proof.verify(&a, root_hash);
+        let verified = proof.verify(&a);
         assert!(verified);
 
         // proof at 1 should be ok
         let proof = t.proof_at(1).unwrap();
-        let verified = proof.verify(&b, root_hash);
+        let verified = proof.verify(&b);
         assert!(verified);
 
         // proof at 2 should be ok
         let proof = t.proof_at(2).unwrap();
-        let verified = proof.verify(&c, root_hash);
+        let verified = proof.verify(&c);
         assert!(verified);
 
         // proof at 3 should be ok
         let proof = t.proof_at(3).unwrap();
-        let verified = proof.verify(&d, root_hash);
+        let verified = proof.verify(&d);
         assert!(verified);
 
         // proof at 4 should be ok
         let proof = t.proof_at(4).unwrap();
-        let verified = proof.verify(&e, root_hash);
+        let verified = proof.verify(&e);
         assert!(verified);
     }
 
@@ -547,7 +547,8 @@ mod test {
         // verify valid hashes
         rand_hashes.iter().enumerate().for_each(|(i, h)| {
             let proof = t.proof_at(i).unwrap();
-            let verified = proof.verify(h, root_hash);
+            let verified = proof.verify(h);
+            assert_eq!(root_hash, proof.root());
             assert!(verified);
         });
 
@@ -560,7 +561,8 @@ mod test {
                 garbage_h[0] = 0;
             }
             let proof = t.proof_at(i).unwrap();
-            let verified = proof.verify(&garbage_h, root_hash);
+            let verified = proof.verify(&garbage_h);
+            assert_eq!(root_hash, proof.root());
             assert!(!verified);
         });
         println!("levels={}", t.level_count());

@@ -67,7 +67,10 @@ impl MemDb {
 
 #[derive(Debug, Serialize, Deserialize, Default)]
 struct MemDbInner {
+    // A simple one-dimensional array used to store each file metadata.
+    // Pretty simple, since a file is always referred by its index.
     entries: Vec<MemDbEntry>,
+    // the database merkle tree
     tree: MerkleTree,
 }
 

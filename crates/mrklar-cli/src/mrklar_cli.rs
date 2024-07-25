@@ -1,7 +1,6 @@
 use std::{net::IpAddr, path::{Path, PathBuf}, str::FromStr};
 
 use clap::{Parser, Subcommand};
-use eyre::eyre;
 use mrklar_common::config::{NetConfig, DEFAULT_SERVER_HOST_STR, DEFAULT_SERVER_PORT_STR};
 use mrklar_api::MrklarApi;
 
@@ -73,12 +72,12 @@ pub struct DownloadCmd {
     #[arg(value_name = "INDEX")]
     index: u64,
 
-    /// Perform file verification using the remote archive merkle root
-    #[arg(
-        long, 
-        value_name = "PROOF", 
-    )]
-    pub verify: Option<String>,
+    // /// Perform file verification using the remote archive merkle root
+    // #[arg(
+    //     long, 
+    //     value_name = "PROOF", 
+    // )]
+    // pub verify: Option<String>,
 
     /// Directory where the downloaded file should be saved
     #[arg(
@@ -131,20 +130,21 @@ async fn run_upload_cmd(api: MrklarApi, path: &Path) -> eyre::Result<()> {
     Ok(())
 }
 
-async fn run_download_cmd(api: MrklarApi, index: u64, out_dir: Option<PathBuf>, out_filename: Option<String>, root: Option<String>, force: bool) -> eyre::Result<()> {
-    let root_v = if let Some(root_hex) = root {
-        Some(hex::decode(root_hex).map_err(|_| eyre!("Invalid merkle root hash."))?)
-    } else {
-        None
-    };
+async fn run_download_cmd(api: MrklarApi, index: u64, out_dir: Option<PathBuf>, out_filename: Option<String>, force: bool) -> eyre::Result<()> {
+    // let root_v = if let Some(root_hex) = root {
+    //     Some(hex::decode(root_hex).map_err(|_| eyre!("Invalid merkle root hash."))?)
+    // } else {
+    //     None
+    // };
 
-    let result = api.download(index, out_dir, out_filename, root_v, force).await?;
+    let result = api.download(index, out_dir, out_filename, force).await?;
     println!("path: {}", result.0.display());
     println!("{}", result.1);
-    if result.2.is_some() {
-        let ok = result.2.unwrap();
-        println!("verification: {}", if ok { "OK" } else { "FAILED" } );
-    }
+    println!("verification: {}", if result.2 { "OK" } else { "FAILED" } );
+    // if result.2.is_some() {
+    //     let ok = result.2.unwrap();
+    //     println!("verification: {}", if ok { "OK" } else { "FAILED" } );
+    // }
     Ok(())
 }
 
@@ -171,7 +171,7 @@ async fn main() -> eyre::Result<()> {
             run_upload_cmd(api, &p).await?
         },
         CliSubcommand::Download(download_cmd) => {
-            run_download_cmd(api, download_cmd.index, download_cmd.out_dir, download_cmd.out_filename, download_cmd.verify, download_cmd.force).await?
+            run_download_cmd(api, download_cmd.index, download_cmd.out_dir, download_cmd.out_filename, download_cmd.force).await?
         },
         CliSubcommand::Proof(proof_cmd) => {
             run_proof_cmd(api, proof_cmd.index).await?

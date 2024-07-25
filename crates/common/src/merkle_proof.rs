@@ -31,6 +31,7 @@ impl fmt::Display for MerkleProofHash {
 
 #[derive(Debug, Serialize, Deserialize, Default, Clone)]
 pub struct MerkleProof {
+    root: Vec<u8>,
     hashes: Vec<MerkleProofHash>,
 }
 
@@ -48,8 +49,15 @@ impl fmt::Display for MerkleProof {
 }
 
 impl MerkleProof {
-    pub fn with_hashes(hashes: Vec<MerkleProofHash>) -> Self {
-        MerkleProof { hashes }
+    pub fn from_raw_parts(root: Vec<u8>, hashes: Vec<MerkleProofHash>) -> Self {
+        MerkleProof { 
+            root,
+            hashes 
+        }
+    }
+
+    pub fn root(&self) -> &Vec<u8> {
+        &self.root
     }
 
     pub fn null_hash() -> Vec<u8> {
@@ -75,7 +83,41 @@ impl MerkleProof {
         MerkleProof::sha256_pair(&hex::decode(left).unwrap(), &hex::decode(right).unwrap())
     }
 
-    pub fn verify(&self, input: &Vec<u8>, root: &Vec<u8>) -> bool {
+    // pub fn _verify(&self, input: &Vec<u8>, root: &Vec<u8>) -> bool {
+    //     if self.hashes.is_empty() {
+    //         return false;
+    //     }
+
+    //     let mut hasher = Sha256::new();
+
+    //     if self.hashes[0].left {
+    //         hasher.update(&self.hashes[0].hash);
+    //         hasher.update(input);
+    //     } else {
+    //         hasher.update(input);
+    //         hasher.update(&self.hashes[0].hash);
+    //     }
+
+    //     for i in 1..self.hashes.len() {
+    //         let h = hasher.finalize_reset();
+
+    //         if self.hashes[i].left {
+    //             hasher.update(&self.hashes[i].hash);
+    //             hasher.update(h);
+    //         } else {
+    //             hasher.update(h);
+    //             hasher.update(&self.hashes[i].hash);
+    //         }
+    //     }
+
+    //     let hash = hasher.finalize().to_vec(); 
+    //     let ok1 = hash == *root;
+    //     let ok2 = hash == self.root;
+    //     assert_eq!(ok1, ok2);
+        
+    //     ok1
+    // }
+    pub fn verify(&self, input: &Vec<u8>) -> bool {
         if self.hashes.is_empty() {
             return false;
         }
@@ -102,7 +144,7 @@ impl MerkleProof {
             }
         }
 
-        hasher.finalize().to_vec() == *root
+        hasher.finalize().to_vec() == self.root
     }
 }
 

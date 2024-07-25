@@ -76,7 +76,8 @@ mod test {
         assert_eq!(count_files, 1);
 
         let merkle_proof = api.proof(file_index).await.unwrap();
-        assert!(merkle_proof.verify(&p_sha256, &merkle_root));
+        assert!(merkle_proof.verify(&p_sha256));
+        assert_eq!(merkle_proof.root(), &merkle_root);
 
         tmp_empty_db_dir.close().unwrap();
         tmp_empty_files_dir.close().unwrap();
@@ -152,7 +153,7 @@ mod test {
         for i in 0..N_FILES {
             // index, merkle_root
             let proof = api.proof(i as u64).await.unwrap();
-            let ok = proof.verify(&file_sha256s[i], &root);
+            let ok = proof.verify(&file_sha256s[i]);
             assert!(ok);
         }
 
@@ -164,7 +165,6 @@ mod test {
                     i as u64,
                     Some(tmp_dl_path.clone()),
                     None,
-                    Some(root.clone()),
                     false,
                 )
                 .await
@@ -178,7 +178,8 @@ mod test {
 
             assert_eq!(&dl_sha256, &expected_sha256);
 
-            let ok = dl_result.1.verify(&dl_sha256, &root);
+            let ok = dl_result.1.verify(&dl_sha256);
+            assert_eq!(dl_result.1.root(), &root);
             assert!(ok);
         }
 
