@@ -64,6 +64,7 @@ mod test {
 
         let p = get_test_files_dir().unwrap().join("0");
         let (file_index, merkle_root) = api.upload(&p).await.unwrap();
+        assert_eq!(file_index, 0);
         let p_sha256 = sha256(p).unwrap();
 
         let zero = config.files_db_dir().join("0");
