@@ -126,6 +126,9 @@ cargo run --bin mrklar-cli -- --host 127.0.0.1 --port 10000 download 0 --out-dir
 
 ## 5. Environment Variables
 
+- `MRKLAR_PORT=<NUM>` : The server port number to listen on.
+- `MRKLAR_IP_ADDR=<NUM>` : The server host ip.
+- `MRKLAR_DB_DIR=<PATH>` : Path of the directory on the server where the merkle tree db will be saved
 - `MRKLAR_FILES_DIR=<PATH>` : Path of the directory on the server where the uploaded files will be saved
 - `MRKLAR_TRACING=<true|false>` : Enable/disable server trace
 - `MRKLAR_TRACING_LEVEL=<"error" | "warn" | "info" | "debug" | "trace">` : max server trace level
@@ -180,7 +183,16 @@ From another terminal window run:
 # This command will upload 200 times the same file (the './LICENSE' file)
 # to the remote archive listening to port 10002
 cd scripts
-./cli.sh
+./cli_upload.sh
+```
+
+Wait a few uploads, then, from a thrid terminal window run the concurrent download script:
+
+```bash
+# This command will download the 200 uploaded files to the remote archive listening to port 10002
+# (multiple copies of the same './LICENSE' file, since it is the only file that has been uploaded)
+cd scripts
+./cli_download.sh
 ```
 
 ## Tests using Docker
@@ -192,18 +204,4 @@ cd docker/compose
 docker-compose up
 ```
 
-From another terminal window run:
-
-```bash
-# This command will upload 200 times the same file (the './LICENSE' file)
-# to the remote archive listening to port 10002
-cd scripts
-./cli.sh
-```
-
-or
-
-```bash
-# From the cargo workspace root directory
-cargo run --bin mrklar-cli -- --host 127.0.0.1 --port 10002 upload ./LICENSE
-```
+Run the `./cli_uload.sh` and `./cli_download.sh` as described above.

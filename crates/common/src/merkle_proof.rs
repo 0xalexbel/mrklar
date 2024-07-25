@@ -37,6 +37,7 @@ pub struct MerkleProof {
 
 impl fmt::Display for MerkleProof {
     fn fmt(&self, fmt: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(fmt, "Merkle root: {}", hex::encode(&self.root))?;
         writeln!(fmt, "Merkle proof (len={}):", self.hashes.len())?;
         if !self.hashes.is_empty() {
             for i in 0..(self.hashes.len()-1) {

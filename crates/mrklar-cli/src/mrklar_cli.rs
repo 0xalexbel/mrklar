@@ -131,20 +131,10 @@ async fn run_upload_cmd(api: MrklarApi, path: &Path) -> eyre::Result<()> {
 }
 
 async fn run_download_cmd(api: MrklarApi, index: u64, out_dir: Option<PathBuf>, out_filename: Option<String>, force: bool) -> eyre::Result<()> {
-    // let root_v = if let Some(root_hex) = root {
-    //     Some(hex::decode(root_hex).map_err(|_| eyre!("Invalid merkle root hash."))?)
-    // } else {
-    //     None
-    // };
-
     let result = api.download(index, out_dir, out_filename, force).await?;
     println!("path: {}", result.0.display());
     println!("{}", result.1);
     println!("verification: {}", if result.2 { "OK" } else { "FAILED" } );
-    // if result.2.is_some() {
-    //     let ok = result.2.unwrap();
-    //     println!("verification: {}", if ok { "OK" } else { "FAILED" } );
-    // }
     Ok(())
 }
 

@@ -7,11 +7,11 @@
 # RELEASE=1
 
 PORT=10002
-DB_DIR="./tmp/db"
-FILES_DIR="./tmp/files"
+TMP_DIR="./tmp"
+DB_DIR="${TMP_DIR}/db"
+FILES_DIR="${TMP_DIR}/files"
 
-rm -rf "${DB_DIR}"
-rm -rf "${FILES_DIR}"
+rm -rf "${TMP_DIR}"
 
 mkdir -p "${DB_DIR}"
 mkdir -p "${FILES_DIR}"
