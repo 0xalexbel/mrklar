@@ -12,30 +12,30 @@ struct MerkleTreeLevel {
 }
 
 impl MerkleTreeLevel {
-    pub fn new() -> Self {
+    fn new() -> Self {
         MerkleTreeLevel {
             level: 0,
             hashes: vec![],
         }
     }
 
-    pub fn is_empty(&self) -> bool {
+    fn is_empty(&self) -> bool {
         self.len() == 0
     }
 
-    pub fn is_full(&self) -> bool {
+    fn is_full(&self) -> bool {
         self.len() >= self.max_len()
     }
 
-    pub fn max_len(&self) -> usize {
+    fn max_len(&self) -> usize {
         MerkleTreeLevel::max_len_at_level(self.level)
     }
 
-    pub fn max_len_at_level(level: u8) -> usize {
+    fn max_len_at_level(level: u8) -> usize {
         two_pow_n(level) as usize
     }
 
-    pub fn len(&self) -> usize {
+    fn len(&self) -> usize {
         self.hashes.len()
     }
 
@@ -59,11 +59,11 @@ impl MerkleTreeLevel {
         Ok(())
     }
 
-    pub fn add_hash(&mut self, hash: Vec<u8>) -> Result<(), MerkleTreeError> {
+    fn add_hash(&mut self, hash: Vec<u8>) -> Result<(), MerkleTreeError> {
         self.push_hash(hash)
     }
 
-    pub fn sibling_index(&self, index: usize) -> usize {
+    fn sibling_index(&self, index: usize) -> usize {
         if index % 2 == 0 {
             index + 1
         } else {
@@ -71,7 +71,7 @@ impl MerkleTreeLevel {
         }
     }
 
-    pub fn left_right_at(&self, index: usize) -> (usize, usize) {
+    fn left_right_at(&self, index: usize) -> (usize, usize) {
         if index % 2 == 0 {
             (index, index + 1)
         } else {
@@ -106,7 +106,7 @@ impl MerkleTreeLevel {
         }
     }
 
-    pub fn try_parent_index(&self, index: usize) -> Result<usize, MerkleTreeError> {
+    fn try_parent_index(&self, index: usize) -> Result<usize, MerkleTreeError> {
         if self.level == 0 {
             return Err(MerkleTreeError::NodeDoesNotExist(self.level, index));
         }
