@@ -25,19 +25,6 @@ impl FileService {
     }
 }
 
-#[allow(dead_code)]
-fn test_throw_io_error() -> Result<(), io::Error> {
-    let f = std::fs::File::open("/gfdhfhfhddfgdfgd/asdfds/dfg/dfg/ggdg/dfg/sfgd/fg");
-    match f {
-        Ok(_) => (),
-        Err(e) => {
-            tracing::error!(message = "DUMMY TEST HERE!!!!");
-            return Err(e);
-        }
-    };
-    Ok(())
-}
-
 #[tonic::async_trait]
 impl FileApi for FileService {
     /// Returns the number of file entries in the archive
@@ -315,4 +302,18 @@ fn upload_request_chunk(o: Option<Result<UploadRequest, Status>>) -> Result<Vec<
         _ => return Err(ServerError::UnknownMessageType),
     };
     Ok(chunk)
+}
+
+/// A test function to force a real io error
+#[allow(dead_code)]
+fn test_throw_io_error() -> Result<(), io::Error> {
+    let f = std::fs::File::open("/gfdhfhfhddfgdfgd/asdfds/dfg/dfg/ggdg/dfg/sfgd/fg");
+    match f {
+        Ok(_) => (),
+        Err(e) => {
+            tracing::error!(message = "DUMMY TEST HERE!!!!");
+            return Err(e);
+        }
+    };
+    Ok(())
 }

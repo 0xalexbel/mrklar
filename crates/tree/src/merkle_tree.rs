@@ -122,15 +122,6 @@ impl MerkleTreeLevel {
         Ok(parent_index)
     }
 
-    // fn parent_index(&self, index: usize) -> usize {
-    //     assert!(self.level > 0);
-
-    //     let parent_index = index / 2;
-    //     assert!(parent_index < MerkleTreeLevel::max_len_at_level(self.level - 1));
-
-    //     parent_index
-    // }
-
     fn hash_left_right_at(&self, index: usize) -> Result<Vec<u8>, MerkleTreeError> {
         let (left, right) = self.left_right_at(index);
         assert!(left + 1 == right);
@@ -168,11 +159,11 @@ impl MerkleTree {
         MerkleTree::default()
     }
 
-    pub fn is_empty(&self) -> bool {
+    fn is_empty(&self) -> bool {
         self.level_count() == 1 && self.leaves().is_empty()
     }
 
-    pub fn level_count(&self) -> u8 {
+    fn level_count(&self) -> u8 {
         assert!(!self.levels.is_empty());
         assert!(self.levels.len() < MAX_LEVEL_COUNT as usize);
         self.levels.len() as u8
@@ -190,7 +181,7 @@ impl MerkleTree {
         &mut self.levels[index as usize]
     }
 
-    pub fn leaf_count(&self) -> usize {
+    fn leaf_count(&self) -> usize {
         self.leaves().len()
     }
 
@@ -206,6 +197,7 @@ impl MerkleTree {
         self.level(self.level_count() - 1)
     }
 
+    /// Returns the merkle root 
     pub fn root_hash(&self) -> Result<&Vec<u8>, MerkleTreeError> {
         self.root().get_hash_at(0)
     }
@@ -238,6 +230,7 @@ impl MerkleTree {
         Ok(())
     }
 
+    /// Add a new leaf to the merkle tree
     pub fn add_leaf(&mut self, hash: Vec<u8>) -> Result<usize, MerkleTreeError> {
         if self.leaves().is_full() || self.is_empty() {
             self.inc_leaves_level()?;
@@ -253,6 +246,7 @@ impl MerkleTree {
         Ok(new_leaf_index)
     }
 
+    /// Compute the merkle proof of the leaf specified by `index`
     pub fn proof_at(&self, index: usize) -> Result<MerkleProof, MerkleTreeError> {
         if self.is_empty() {
             return Err(MerkleTreeError::TreeEmpty);
