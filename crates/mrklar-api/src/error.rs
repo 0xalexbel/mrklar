@@ -14,7 +14,7 @@ pub enum ApiError {
     Unexpected(String),
     #[error("File upload: '{0}': File not found")]
     UploadFileNotFound(String),
-    #[error("File download: '{0}': File already exists")]
+    #[error("File download: '{0}': File already exists, use '--force' option to override any existing file.")]
     DownloadFileAlreadyExists(String),
     #[error(transparent)]
     Common(#[from] mrklar_common::error::Error),

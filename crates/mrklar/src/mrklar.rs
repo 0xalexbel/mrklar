@@ -25,7 +25,7 @@ fn print_env_vars() {
 
 #[tokio::main]
 async fn main() -> eyre::Result<()> {
-    print_env_vars();
     let app = Mrklar::parse();
+    print_env_vars();
     app.server.run().await
 }
