@@ -1,7 +1,7 @@
 # mrklar (Merkle Archive)
-A minimal network archive using Merkle proof
+A minimal network archive using Merkle proof written in full Rust.
 
-The project consists of various crates. 
+The project consists of the following rust crates. 
 - `mrklar`: the server crate
 - `mrklar-api`: a client-side api to interact with the server
 - `mrklar-cli`: a cli to execute download/upload operations from the command-line using the `mrklar-api` crate.
