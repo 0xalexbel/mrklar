@@ -103,12 +103,23 @@ cargo run --bin mrklar-cli -- --host 127.0.0.1 --port 10000 root
 
 ## 3. Download and verify a file
 
-To download the file at index 0, verify it and then store it to the `./my_client/downloads` directory, the current merkle root must be provided as argument using the `--verify <ROOT>` option.
+The download command usage is:
+
+```bash
+cargo run --bin mrklar-cli -- --host 127.0.0.1 --port 10000 download <FILE_INDEX> --out-dir <PATH/TO/DOWNLOADS/DIR> --verify <THE_CURRENT_MERKLE_ROOT>
+```
+
+For example, to download the file at index `0`, verify it and then store it to the `./my_client/downloads` directory, the current merkle root must be provided as argument using the `--verify` option.
 
 ```bash
 # Here, using the above merkle root, the command would look like this:
 cargo run --bin mrklar-cli -- --host 127.0.0.1 --port 10000 download 0 --out-dir ./my_client/downloads --verify 6baf2dbc2729dc5c218f11cb3ee01f274e332f3c24f9bbf7702e8cc4981ab3ea
 ```
+
+## 4. Additional commands
+
+- `count` : returns the number of stored files and the remote archive
+- `proof` : returns the merkle proof of the file with the specified index
 
 # Docker
 
