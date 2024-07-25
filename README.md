@@ -3,11 +3,17 @@ A minimal network archive using Merkle proof
 
 ## Build
 
-The repository requires the `protoc` compiler
+The repository requires the `protoc` compiler. To install `protoc`, follow instructions from the [protoc install page](https://grpc.io/docs/protoc-installation/)
+
 
 ```bash
-apt-get update;
+# on Linux
 apt install -y protobuf-compiler
+```
+
+```bash
+# on Mac
+brew install protobuf
 ```
 
 To build the repostory, run: 
