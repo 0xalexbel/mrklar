@@ -1,3 +1,13 @@
+## The Crates
+
+The project consists of the following rust crates. 
+- `mrklar`: the server crate
+- `mrklar-api`: a client-side api to interact with the server
+- `mrklar-cli`: a cli to execute download/upload operations from the command-line using the `mrklar-api` crate.
+- `tree`: the merkle tree crate
+- `fs`: the file system helpers crate
+- `common`: the shared `proto` code and generated rust code as well as other shared resources.
+
 ## The Merkle Tree
 
 Location:
@@ -61,16 +71,17 @@ The Client-Server messaging relies on gRPC using the `protoc` compiler.
 
 ## What's missing
 
-The following important features are missing:
+The following important features are missing or should be improved:
 
-- add an option to send the merkle proof inside the server upload response. The current implementation only sends back the new merkle root.
+- Add an option to send the merkle proof inside the server upload response. The current implementation only sends back the new merkle root.
 - The client-server protocol encryption. This should be quite straightforward with the help of tonic's `ServerTlsConfig` and `Certificate` traits and structs
-- A better in-memory/disk storage mechanism. The current implementation saves the database on disk after each upload which is obviously very bad in terms of perfomance.
-- Use a Redis db to store the merkle tree ?
 - The in-memory database roll-back.
 - The in-memory database sanity and integrity check mechanism.
+- Merkle-tree rebuild
+- A better in-memory/disk storage mechanism. The current implementation saves the database on disk after each upload which is obviously very bad in terms of perfomance.
+- Use a Redis db to store the merkle tree ?
 - JsonRPC protocol (for `curl` access)
-- cli JSON output format for better output parsing using `jq` for example.
+- CLI JSON output format for better output parsing using `jq` for example.
 
 ## Where to go from here ?
 

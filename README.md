@@ -1,13 +1,7 @@
 # mrklar (Merkle Archive)
 A minimal network archive using Merkle proof written in pure Rust.
 
-The project consists of the following rust crates. 
-- `mrklar`: the server crate
-- `mrklar-api`: a client-side api to interact with the server
-- `mrklar-cli`: a cli to execute download/upload operations from the command-line using the `mrklar-api` crate.
-- `tree`: the merkle tree crate
-- `fs`: the file system helpers crate
-- `common`: the shared `proto` code and generated rust code as well as other shared resources.
+For more information about the project, please refer to the project (notes)[https://github.com/0xalexbel/mrklar/blob/main/NOTES.md]
 
 # Install
 
@@ -205,3 +199,4 @@ docker-compose up
 ```
 
 Run the `./cli_uload.sh` and `./cli_download.sh` as described above.
+
