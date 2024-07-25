@@ -4,6 +4,7 @@ mod test {
 
     use mrklar::ServerConfig;
     use mrklar_api::MrklarApi;
+    use mrklar_common::config::DEFAULT_SERVER_PORT;
     use mrklar_fs::{gen_tmp_filename, get_test_files_dir, sha256};
     use tempfile::tempdir;
 
@@ -19,6 +20,7 @@ mod test {
         println!("test db dir='{:?}'", tmp_empty_db_dir.path());
 
         let config = ServerConfig::test_default()
+            .with_port(DEFAULT_SERVER_PORT)
             .with_tracing(false)
             .with_db_dir(tmp_empty_db_dir.path().to_path_buf());
 
@@ -46,7 +48,9 @@ mod test {
         let tmp_empty_files_dir = tempdir().unwrap();
         println!("test files dir='{:?}'", tmp_empty_files_dir.path());
 
+        // inc the port to avoid port conflict
         let config = ServerConfig::test_default()
+            .with_port(DEFAULT_SERVER_PORT + 1)
             .with_tracing(false)
             .with_db_dir(tmp_empty_db_dir.path().to_path_buf())
             .with_files_dir(tmp_empty_files_dir.path().to_path_buf());
@@ -82,7 +86,7 @@ mod test {
     #[tokio::test(flavor = "multi_thread")]
     async fn test_all_sequential() {
         const N_FILES: usize = 300;
-        
+
         let tmp_db_dir = tempdir().unwrap();
         println!("test db dir={:?}", tmp_db_dir.path());
 
@@ -97,7 +101,9 @@ mod test {
         println!("test dl dir={:?}", tmp_dl_dir.path());
         let tmp_dl_path = tmp_dl_dir.path().to_path_buf();
 
+        // inc the port to avoid port conflict
         let config = ServerConfig::default()
+            .with_port(DEFAULT_SERVER_PORT + 2)
             .with_tracing(false)
             .with_db_dir(tmp_db_dir.path().to_path_buf())
             .with_files_dir(tmp_files_dir.path().to_path_buf());
@@ -154,7 +160,13 @@ mod test {
         for i in 0..N_FILES {
             // index, merkle_root
             let dl_result = api
-                .download(i as u64, Some(tmp_dl_path.clone()), None, Some(root.clone()), false)
+                .download(
+                    i as u64,
+                    Some(tmp_dl_path.clone()),
+                    None,
+                    Some(root.clone()),
+                    false,
+                )
                 .await
                 .unwrap();
             assert!(dl_result.0.is_file());
