@@ -1,0 +1,19 @@
+[package]
+name = "mrklar-testing"
+authors.workspace = true
+edition.workspace = true
+homepage.workspace = true
+license.workspace = true
+repository.workspace = true
+rust-version.workspace = true
+version.workspace = true
+
+[dependencies]
+mrklar-common.workspace = true
+mrklar-fs.workspace = true
+mrklar-api.workspace = true
+mrklar.workspace = true
+tempfile.workspace = true
+tokio.workspace = true
+tokio-stream.workspace = true
+tonic.workspace = true

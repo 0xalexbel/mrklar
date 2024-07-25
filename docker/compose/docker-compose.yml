@@ -1,0 +1,22 @@
+services:
+  mrklar-service-1:
+    build:
+      context: .
+    environment:
+      MRKLAR_PORT: "8547"
+    ports:
+      - "127.0.0.1:10000:8547"
+  mrklar-service-2:
+    build:
+      context: .
+    environment:
+      MRKLAR_PORT: "8547"
+    ports:
+      - "127.0.0.1:10001:8547"
+  mrklar-service-3:
+    build:
+      context: .
+    environment:
+      MRKLAR_PORT: "8547"
+    ports:
+      - "127.0.0.1:10002:8547"

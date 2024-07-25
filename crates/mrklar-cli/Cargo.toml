@@ -1,0 +1,22 @@
+[package]
+name = "mrklar-cli"
+authors.workspace = true
+edition.workspace = true
+homepage.workspace = true
+license.workspace = true
+repository.workspace = true
+rust-version.workspace = true
+version.workspace = true
+
+[[bin]]
+name = "mrklar-cli"
+path = "src/mrklar_cli.rs"
+
+[dependencies]
+mrklar-common.workspace = true
+mrklar-api.workspace = true
+clap = { version = "4", features = ["derive", "env", "unicode", "wrap_help"] }
+hex.workspace = true
+tokio.workspace = true
+eyre.workspace = true
+

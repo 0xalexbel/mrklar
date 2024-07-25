@@ -1,0 +1,32 @@
+[package]
+name = "mrklar"
+authors.workspace = true
+edition.workspace = true
+homepage.workspace = true
+license.workspace = true
+repository.workspace = true
+rust-version.workspace = true
+version.workspace = true
+
+[[bin]]
+name = "mrklar"
+path = "src/mrklar.rs"
+
+[dependencies]
+mrklar-common.workspace = true
+mrklar-fs.workspace = true
+mrklar-tree.workspace = true
+bincode.workspace = true
+clap = { version = "4", features = ["derive", "env", "unicode", "wrap_help"] }
+eyre.workspace = true
+hex.workspace = true
+parking_lot.workspace = true
+sha2.workspace = true
+serde.workspace = true
+tempfile.workspace = true
+thiserror.workspace = true
+tokio.workspace = true
+tokio-stream.workspace = true
+tonic.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true

@@ -1,0 +1,36 @@
+# docker run -it --entrypoint /bin/bash mrklar
+# docker run -it --entrypoint /usr/local/cargo/bin/cargo mrklar run --bin mrklar -- --help
+FROM rust:1.79.0-slim-bullseye AS build
+
+RUN apt-get update && \
+    apt install -y protobuf-compiler
+
+ARG APP_NAME=mrklar
+
+WORKDIR /build
+
+COPY . .
+
+# Debug
+#RUN cargo build 
+#RUN cp ./target/debug/$APP_NAME /bin/mrklar
+
+# Release
+RUN cargo build --locked --release
+RUN cp ./target/release/$APP_NAME /bin/mrklar
+
+FROM debian:bullseye-slim AS final
+COPY --from=build /bin/mrklar /bin/
+
+RUN mkdir /mrklar
+RUN mkdir /mrklar/db
+RUN mkdir /mrklar/files
+
+ENV MRKLAR_IP_ADDR="0.0.0.0"
+ENV MRKLAR_PORT=8547
+ENV MRKLAR_DB_DIR="/mrklar/db"
+ENV MRKLAR_FILES_DIR="/mrklar/files"
+ENV MRKLAR_TRACING=true
+ENV MRKLAR_TRACING_LEVEL="info"
+
+CMD ["/bin/mrklar"]

@@ -1,0 +1,61 @@
+syntax = "proto3";
+
+option java_package = "com.mrklar.v1";
+
+package mrklar.v1;
+
+service FileApi {
+  rpc Count(Empty) returns (U64);
+  rpc Download(FileIndex) returns (stream DownloadResponse);
+  rpc Upload(stream UploadRequest) returns (UploadResponse);
+  rpc Proof(FileIndex) returns (stream ProofResponse);
+  rpc Root(Empty) returns (RootResponse);
+}
+
+message Empty { 
+}
+
+message U64 { 
+  uint64 value = 1;
+}
+
+message FileIndex { 
+  uint64 index = 1;
+}
+
+message FileMetadata { 
+  string filename = 1;
+}
+
+message Entry { 
+  FileMetadata metadata = 1;
+  bytes merkle_proof = 2;
+}
+
+message DownloadResponse {
+  oneof type {
+    Entry entry = 1;
+    bytes chunk = 2;
+  }
+}
+
+message UploadRequest { 
+  oneof type {
+    FileMetadata metadata = 1;
+    bytes sha256 = 2;
+    bytes chunk = 3;
+  }
+}
+
+message UploadResponse { 
+  FileIndex index = 1;
+  bytes merkle_root = 2;
+}
+
+message ProofResponse { 
+  bytes merkle_proof = 1;
+}
+
+message RootResponse { 
+  bytes merkle_root = 1;
+}

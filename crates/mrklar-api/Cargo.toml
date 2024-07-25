@@ -1,0 +1,20 @@
+[package]
+name = "mrklar-api"
+authors.workspace = true
+edition.workspace = true
+homepage.workspace = true
+license.workspace = true
+repository.workspace = true
+rust-version.workspace = true
+version.workspace = true
+
+[dependencies]
+mrklar-common.workspace = true
+mrklar-fs.workspace = true
+eyre.workspace = true
+hex.workspace = true
+thiserror.workspace = true
+tokio.workspace = true
+tokio-stream.workspace = true
+tonic.workspace = true
+url.workspace = true

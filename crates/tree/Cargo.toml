@@ -1,0 +1,19 @@
+[package]
+name = "mrklar-tree"
+authors.workspace = true
+edition.workspace = true
+homepage.workspace = true
+license.workspace = true
+repository.workspace = true
+rust-version.workspace = true
+version.workspace = true
+
+[dependencies]
+mrklar-common.workspace = true
+bincode.workspace = true
+hex.workspace = true
+rand.workspace = true
+serde.workspace = true
+sha2.workspace = true
+thiserror.workspace = true
+
